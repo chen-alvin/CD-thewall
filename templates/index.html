@@ -1,0 +1,70 @@
+<html>
+<head>
+  <title>the wall.</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <style>
+  td{
+    vertical-align: top
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+    <h1>the wall.<small></small></h1>
+    </div>
+    <div class='row'>
+      <div class="col-xs-6">
+        <h2>Register</h2>
+        <form id="register" action='/create_user' method='POST'>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Email</span>
+            <input name="email" type="text" class="form-control" placeholder="example@gmail.com" aria-describedby="basic-addon1" autofocus>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">First name</span>
+            <input name="first_name" type="text" class="form-control" placeholder="Michael" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Last name</span>
+            <input name="last_name" type="text" class="form-control" placeholder="Choi" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Password </span>
+            <input name="password" type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+            <span class="input-group-btn"><button class="btn btn-default" type="submit">Register!</button></span>
+          </div>
+        </form>
+        <h2>Login</h2>
+        <form id="login" action='/login' method='POST'>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Email</span>
+            <input name="email" type="text" class="form-control" placeholder="example@gmail.com" aria-describedby="basic-addon1" autofocus>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Password </span>
+            <input name="password" type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+            <span class="input-group-btn"><button class="btn btn-default" type="submit">Login!</button></span>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="col-xs-6">
+        <h3>Messages</h3>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <p>{{message}}</p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+
+  </div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</html>
