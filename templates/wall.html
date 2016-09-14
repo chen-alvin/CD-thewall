@@ -23,10 +23,10 @@
   <div class="container" >
     <div class="page-header">
       <h1>the wall.<small></small></h1>
+      Logged in as <strong>{{session['name']}}</strong><br /><br />
       <form action='/logout' method='POST'>
         <button class="btn btn-default" type="submit">Logout</button>
       </form>
-      Logged in as <strong>{{session['name']}}</strong>
     </div>
     <div class='col-md-8 col-md-offset-2'>
       {% if session['user_id']  != -1 %}

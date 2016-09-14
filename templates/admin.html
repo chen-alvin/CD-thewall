@@ -2,7 +2,16 @@
 <a href='/reset'>hard reset</a>
 <a href='/soft'>soft reset</a>
 <a href='/guest' target='_blank'>guest mode</a><hr />
-{{session}}<hr />
-{{users}}<hr />
-{{messages}}<hr />
-{{comments}}
+{{session}}
+<hr />
+{% for user in users %}
+  {{user}}<br /><br />
+{%endfor%}
+<hr />
+{% for user in messages %}
+  {{user}}<br /><br />
+{%endfor%}
+<hr />
+{% for user in comments %}
+  {{user}}<br /><br />
+{%endfor%}

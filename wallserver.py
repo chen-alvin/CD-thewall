@@ -3,13 +3,12 @@ from flask.ext.bcrypt import Bcrypt
 from mysqlconnection import MySQLConnector
 import re
 
-EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-PW_REGEX = re.compile(r'^(?=.*\d)(?=.*[A-Za-z])[a-zA-Z0-9\d]{8,}$')
-
 app = Flask(__name__)
 app.secret_key='blah'
 bcrypt = Bcrypt(app)
 mysql = MySQLConnector(app, 'thewall') # db we are using for login/reg/The Wall
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+PW_REGEX = re.compile(r'^(?=.*\d)(?=.*[A-Za-z])[a-zA-Z0-9\d]{8,}$')
 
 @app.route('/')
 def index():
@@ -34,8 +33,9 @@ def create_user():
     user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
     query_data = { 'email': email }
     user = mysql.query_db(user_query, query_data)# user will be returned in a list
+    print user
 
-    if user[0]['email'] == email:
+    if user != []:
         flash('Email already registered. Login instead?')
         return redirect('/')
     if not EMAIL_REGEX.match(email):
@@ -54,12 +54,11 @@ def create_user():
         session.pop('_flashes')
     user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
     query_data = { 'email': email }
-    user = mysql.query_db(user_query, query_data)# user will be returned in a list
+    user = mysql.query_db(user_query, query_data) # user will be returned in a list
     session.clear()
     session['user_id'] = user[0]['user_id']
     session['name'] = user[0]['first_name'] +' '+user[0]['last_name']
-
-    return redirect('/')
+    return redirect('/wall')
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -133,25 +132,6 @@ def create_message():
     mysql.query_db(insert_query, query_data)
     return redirect('/wall')
 
-@app.route('/delete_message/<id>', methods=['POST'])
-def delete_message(id):
-    print id
-    print type(id)
-    delete_query = "DELETE FROM comments where message_id = :id; \
-                    DELETE FROM messages where message_id = :id"
-    query_data = {'id':id}
-    mysql.query_db(delete_query,query_data)
-    return redirect('/wall')
-
-@app.route('/delete_comment/<id>', methods=['POST'])
-def delete_comment(id):
-    print id
-    print type(id)
-    delete_query = "DELETE FROM comments where comment_id = :id;"
-    query_data = {'id':id}
-    mysql.query_db(delete_query,query_data)
-    return redirect('/wall')
-
 @app.route('/create_comment', methods=['POST'])
 def create_comment():
     comment = request.form['comment']
@@ -162,6 +142,25 @@ def create_comment():
                     VALUES            (:comment,NOW(),NOW(),:user_id,:message_id)"
     query_data = {'comment':comment, 'user_id':user_id,'message_id':message_id}
     mysql.query_db(insert_query, query_data)
+    return redirect('/wall')
+
+@app.route('/delete_message/<id>', methods=['POST'])
+def delete_message(id):
+    #print id
+    #print type(id)
+    delete_query = "DELETE FROM comments where message_id = :id; \
+                    DELETE FROM messages where message_id = :id"
+    query_data = {'id':id}
+    mysql.query_db(delete_query,query_data)
+    return redirect('/wall')
+
+@app.route('/delete_comment/<id>', methods=['POST'])
+def delete_comment(id):
+    #print id
+    #print type(id)
+    delete_query = "DELETE FROM comments where comment_id = :id;"
+    query_data = {'id':id}
+    mysql.query_db(delete_query,query_data)
     return redirect('/wall')
 
 ###################  Debugging ####################
